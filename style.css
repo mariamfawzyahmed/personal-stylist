@@ -1,0 +1,112 @@
+:root {
+    --gold: #c5a059;
+    --dark: #1a1a1a;
+    --light-bg: #fdfdfd;
+    --white: #ffffff;
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--light-bg); color: var(--dark); }
+
+/* --- Header --- */
+header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 15px 8%; background: var(--white); position: sticky; top: 0; z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+.logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; }
+.logo span { color: var(--gold); }
+.cart-icon { background: var(--dark); color: var(--white); padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 500; }
+
+/* --- Hero Section --- */
+.hero-section { text-align: center; padding: 60px 20px; }
+.hero-section h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 10px; }
+.filter-group { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+.btn-filter { padding: 10px 25px; border-radius: 50px; border: 1px solid #eee; cursor: pointer; background: var(--white); transition: 0.3s; }
+.btn-filter.active { background: var(--dark); color: var(--white); border-color: var(--dark); }
+
+/* --- Grid & Cards --- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; padding: 0 8% 60px; }
+.product-card { background: var(--white); padding: 15px; border-radius: 15px; border: 1px solid #f0f0f0; text-align: center; transition: var(--transition); }
+.product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--gold); }
+
+.img-container {
+    width: 100%; height: 350px; background-color: #f8f8f8; 
+    overflow: hidden; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; margin-bottom: 15px;
+}
+.img-container img { width: 90%; height: 90%; object-fit: contain; transition: transform 0.6s ease; }
+.product-card:hover img { transform: scale(1.08); }
+
+.price { font-family: 'Playfair Display', serif; color: var(--gold); font-weight: bold; font-size: 1.3rem; display: block; margin-bottom: 15px; }
+
+/* --- Buttons & Controls (المكان اللي ظبطناه) --- */
+.add-btn, .qty-controls-main { 
+    width: 100%; 
+    height: 48px; /* توحيد الطول عشان الشكل ميتغيرش */
+    box-sizing: border-box;
+}
+
+.add-btn { 
+    background: var(--dark); color: var(--white); border: none; 
+    border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s;
+}
+.add-btn:hover { background: var(--gold); }
+
+.qty-controls-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 8px;
+    padding: 0 5px; /* تقليل البادنج عشان الزرار ميكبرش */
+    margin-top: 0; /* لغينا المارجن عشان يحل محل الزرار بالظبط */
+}
+
+.qty-controls-main button {
+    background: var(--dark);
+    color: white;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-controls-main button:hover { background: var(--gold); }
+.qty-controls-main span { font-weight: 600; font-size: 1.1rem; color: var(--dark); }
+
+/* --- AI Box & Notifications --- */
+.ai-box {
+    max-width: 700px; margin: 20px auto 40px; padding: 30px;
+    border: 2px solid transparent; border-radius: 20px; text-align: center;
+    background: linear-gradient(white, white) padding-box, linear-gradient(90deg, var(--gold), #eecb8d) border-box;
+    position: relative; box-shadow: 0 10px 30px rgba(197, 160, 89, 0.1); transition: 0.5s;
+}
+.ai-badge {
+    background: var(--gold); color: white; padding: 5px 15px; border-radius: 50px;
+    font-size: 0.8rem; letter-spacing: 2px; position: absolute; top: -15px;
+    left: 50%; transform: translateX(-50%);
+}
+#notification { 
+    position: fixed; bottom: 30px; left: 30px; background: var(--gold); 
+    color: var(--white); padding: 15px 30px; border-radius: 10px; 
+    display: none; z-index: 2000; border-left: 5px solid var(--gold); 
+}
+
+/* تأثير البحث */
+.search-container { margin: 20px auto; max-width: 500px; }
+#searchInput {
+    width: 100%; padding: 12px 20px; border-radius: 25px;
+    border: 1px solid #ddd; outline: none; transition: 0.3s;
+}
+#searchInput:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(197,160,89,0.2); }
+
+/* وصف قصير */
+.short-desc { font-size: 0.85rem; color: #777; margin-bottom: 10px; }

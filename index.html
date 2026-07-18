@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Stylist | AI Powered Wardrobe</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">Personal <span>Stylist</span></div>
+        <div class="cart-wrapper-nav" onclick="window.location.href='cart.html'">
+            <div class="cart-icon">
+                <i class="fas fa-shopping-bag"></i> <span>Bag</span> <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+
+        
+        <h1>Elevate Your Daily Look</h1>
+        <p>Your AI Stylist curated this collection specifically for your aesthetic.</p>
+        
+        <div class="filter-group">
+            <button class="btn-filter active" onclick="getStyles('all', this)">ALL OUTFITS</button>
+            <button class="btn-filter" onclick="getStyles('woman', this)">WOMAN</button>
+            <button class="btn-filter" onclick="getStyles('men', this)">MEN</button>
+            <button class="btn-filter" onclick="getStyles('kids', this)">KIDS</button>
+            <button class="btn-filter" onclick="getStyles('accessories', this)">ACCESSORIES</button>
+        </div>
+    </section>
+
+    
+
+    <main id="products-grid" class="grid"></main>
+
+    <div id="notification">Item added to bag! 🛍️</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

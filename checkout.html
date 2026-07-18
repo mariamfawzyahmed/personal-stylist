@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Personal Stylist</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .checkout-wrapper {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .back-link { text-decoration: none; color: #888; font-size: 0.9rem; display: block; margin-bottom: 20px; }
+        h2 { font-size: 2rem; margin-bottom: 25px; color: #1a1a1a; }
+        .order-summary-box {
+            background: #fff9f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #444; }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .payment-methods { display: flex; gap: 15px; margin-top: 10px; margin-bottom: 20px; }
+        .method-card {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        .method-card.active { border-color: #c5a059; background: #fff9f0; }
+        
+        /* ستايل الجزء الرمادي للفيزا */
+        #visa-details {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none; /* مخفي في البداية */
+        }
+
+        .btn-confirm {
+            width: 100%;
+            padding: 15px;
+            background: #c5a059;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-wrapper">
+        <a href="cart.html" class="back-link">← Back to Cart</a>
+        <h2>Checkout</h2>
+
+        <div class="order-summary-box">
+            Order Total: <span id="checkout-total">$0.00</span>
+        </div>
+
+        <form id="checkout-form">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Shipping Address</label>
+                <input type="text" placeholder="Street name, City, Country" required>
+            </div>
+
+            <label style="font-weight: 500; color: #444;">Payment Method</label>
+            <div class="payment-methods">
+                <div class="method-card active" onclick="selectMethod(this, 'cash')">
+                    💵 Cash on Delivery
+                </div>
+                <div class="method-card" onclick="selectMethod(this, 'visa')">
+                    💳 Visa / Card
+                </div>
+            </div>
+
+            <div id="visa-details">
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="1234 5678 9101 1121">
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 2;">
+                        <label>Expiry Date</label>
+                        <input type="text" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>CVV</label>
+                        <input type="password" placeholder="***">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-confirm">Confirm Order</button>
+        </form>
+    </div>
+
+    <script>
+        function loadTotal() {
+            const cart = JSON.parse(localStorage.getItem('myCart')) || [];
+            let total = 0;
+            cart.forEach(item => total += parseFloat(item.price));
+            document.getElementById('checkout-total').innerText = `$${total.toFixed(2)}`;
+        }
+
+        function selectMethod(element, method) {
+            // تفعيل الزر المختار
+            document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+
+            // إظهار أو إخفاء بيانات الفيزا
+            const visaDetails = document.getElementById('visa-details');
+            if (method === 'visa') {
+                visaDetails.style.display = 'block';
+            } else {
+                visaDetails.style.display = 'none';
+            }
+        }
+
+        document.getElementById('checkout-form').onsubmit = function(e) {
+            e.preventDefault();
+            alert("Order Confirmed! Thank you for shopping with us.");
+            localStorage.removeItem('myCart');
+            window.location.href = 'index.html';
+        };
+
+        loadTotal();
+    </script>
+</body>
+</html>

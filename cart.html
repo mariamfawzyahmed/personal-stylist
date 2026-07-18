@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | Personal Stylist</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: sans-serif; }
+        .cart-wrapper {
+            max-width: 1000px; margin: 60px auto; background: #fff;
+            padding: 50px; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.03);
+        }
+        .cart-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .cart-title-row h1 { font-size: 2.2rem; color: #1a1a1a; margin: 0; }
+        .back-btn { text-decoration: none; color: #888; font-size: 0.9rem; transition: 0.3s; }
+        .back-btn:hover { color: #000; }
+
+        .styled-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .styled-table th {
+            text-align: left; padding-bottom: 20px; border-bottom: 1px solid #eee;
+            color: #bbb; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .styled-table td { padding: 25px 0; border-bottom: 1px solid #fcfcfc; vertical-align: middle; }
+        .item-box { display: flex; align-items: center; gap: 20px; }
+        .item-box img { width: 70px; height: 70px; object-fit: contain; }
+        .item-name { font-weight: 500; color: #333; font-size: 1.05rem; }
+        .price-text { text-align: right; font-weight: 600; color: #c5a059; font-size: 1.1rem; }
+        
+        /* --- تنسيق أزرار الـ + والـ - الجديد --- */
+        .qty-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .qty-btn {
+            background: #f1f1f1;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-btn:hover { background: #c5a059; color: white; }
+        .qty-val { font-weight: bold; color: #555; min-width: 20px; text-align: center; }
+
+        .summary-box { margin-top: 20px; text-align: right; border-top: 1px solid #eee; padding-top: 30px; }
+        .total-label { font-size: 1.6rem; font-weight: 700; color: #1a1a1a; margin-bottom: 30px; }
+        .total-label span { color: #c5a059; margin-left: 10px; }
+        .actions { display: flex; justify-content: flex-end; gap: 15px; }
+        .btn-empty {
+            padding: 12px 35px; border: 1px solid #ff6b6b; color: #ff6b6b;
+            background: transparent; border-radius: 40px; cursor: pointer; transition: 0.3s;
+        }
+        .btn-empty:hover { background: #ff6b6b; color: #fff; }
+        .btn-checkout {
+            padding: 12px 45px; border: none; background: #c5a059; color: #fff;
+            border-radius: 40px; cursor: pointer; font-weight: 700; box-shadow: 0 5px 20px rgba(197, 160, 89, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cart-wrapper">
+        <div class="cart-title-row">
+            <h1>Shopping Cart</h1>
+            <a href="index.html" class="back-btn">← Continue Shopping</a>
+        </div>
+
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th style="text-align: center;">Quantity</th>
+                    <th style="text-align: right;">Total Price</th>
+                </tr>
+            </thead>
+            <tbody id="cart-content"></tbody>
+        </table>
+
+        <div class="summary-box">
+            <div class="total-label">
+                Total Amount: <span id="grand-total">$0.00</span>
+            </div>
+            <div class="actions">
+                <button class="btn-empty" onclick="emptyCart()">Empty Cart</button>
+                <button class="btn-checkout" onclick="goToCheckout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadCart() {
+            const container = document.getElementById('cart-content');
+            const totalText = document.getElementById('grand-total');
+            const cartItems = JSON.parse(localStorage.getItem('myCart')) || [];
+
+            if (cartItems.length === 0) {
+                container.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 60px; color: #999;">Cart is empty.</td></tr>`;
+                totalText.innerText = "$0.00";
+                return;
+            }
+
+            let sum = 0;
+            container.innerHTML = cartItems.map(item => {
+                const qty = item.quantity || 1;
+                const itemTotal = parseFloat(item.price) * qty;
+                sum += itemTotal;
+                return `
+                    <tr>
+                        <td>
+                            <div class="item-box">
+                                <img src="${item.image}" alt="${item.title}">
+                                <span class="item-name">${item.title}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="qty-container">
+                                <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
+                                <span class="qty-val">${qty}</span>
+                                <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+                            </div>
+                        </td>
+                        <td class="price-text">$${itemTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+            totalText.innerText = `$${sum.toFixed(2)}`;
+        }
+
+        // دالة موحدة للزيادة والنقصان
+        function updateQty(id, change) {
+            let cart = JSON.parse(localStorage.getItem('myCart')) || [];
+            const itemIndex = cart.findIndex(p => p.id === id);
+            
+            if (itemIndex !== -1) {
+                cart[itemIndex].quantity = (cart[itemIndex].quantity || 1) + change;
+                
+                // لو الكمية وصلت لـ 0 نمسح المنتج من الكارت
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                localStorage.setItem('myCart', JSON.stringify(cart));
+                loadCart();
+            }
+        }
+
+        function emptyCart() {
+            if(confirm("Empty your cart?")) {
+                localStorage.removeItem('myCart');
+                loadCart();
+            }
+        }
+
+        function goToCheckout() {
+            const cart = JSON.parse(localStorage.getItem('myCart')) || [];
+            if (cart.length === 0) alert("Cart is empty!");
+            else window.location.href = 'checkout.html';
+        }
+
+        loadCart();
+    </script>
+</body>
+</html>
